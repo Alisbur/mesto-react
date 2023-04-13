@@ -9,9 +9,9 @@ import api from '../utils/Api.js';
 
 function Main(props) {
 
-  const [userName, setUserName] = useState('Пусто');
-  const [userDescription, setUserDescription] = useState('Пусто');
-  const [userAvatar, setUserAvatar] = useState('https://avatars.mds.yandex.net/i?id=3a9814029dc1d72f46dca6dcb09f79015c9ec8ad-8254957-images-thumbs&n=13');
+  const [userName, setUserName] = useState('');
+  const [userDescription, setUserDescription] = useState('');
+  const [userAvatar, setUserAvatar] = useState('');
   const [cards, setCards] = useState([]);
 
 
