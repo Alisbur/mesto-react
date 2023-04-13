@@ -58,10 +58,10 @@ function Main(props) {
       </section>
 
       <section className="elements" aria-label="Галерея фотографий">
-        {cards.map((el, i)=><Card key={i} card={el} onCardClick={props.onCardClick} />)}
+        {cards.map((el, i)=><Card key={el._id} card={el} onCardClick={props.onCardClick} />)}
       </section>
 
-      <PopupWithForm name='profilePopup' title='Редактировать профиль' isOpen={props.isEditProfilePopupOpen} onClose={props.onClose} children={
+      <PopupWithForm name='profilePopup' title='Редактировать профиль' SubmitBtnCaption="Сохранить" isOpen={props.isEditProfilePopupOpen} onClose={props.onClose} children={
         <>
           <fieldset className="popup__fieldset">
             <input type="text" className="popup__input popup__input_type_name" placeholder="Введите имя" name="name" required minLength="2" maxLength="40" />
@@ -74,17 +74,17 @@ function Main(props) {
         </>
       } />
 
-      <PopupWithForm name='avatarPopup' title='Обновить аватар' isOpen={props.isEditAvatarPopupOpen} onClose={props.onClose} children={
+      <PopupWithForm name='avatarPopup' title='Обновить аватар' SubmitBtnCaption="Сохранить" isOpen={props.isEditAvatarPopupOpen} onClose={props.onClose} children={
         <fieldset className="popup__fieldset">
           <input type="url" className="popup__input popup__input_type_link" placeholder="Введите ссылку" name="link" required />
           <span className="popup__input-error link-error"></span>
         </fieldset>
       } />
 
-      <PopupWithForm name='confirmPopup' title='Вы уверены?' />
+      <PopupWithForm name='confirmPopup' title='Вы уверены?' SubmitBtnCaption="Да"/>
 
 
-      <PopupWithForm name='cardPopup' title='Новое место' isOpen={props.isAddPlacePopupOpen} onClose={props.onClose} children={
+      <PopupWithForm name='cardPopup' title='Новое место' SubmitBtnCaption="Создать" isOpen={props.isAddPlacePopupOpen} onClose={props.onClose} children={
         <>
           <fieldset className="popup__fieldset">
             <input type="text" className="popup__input popup__input_type_place" placeholder="Введите название места"
