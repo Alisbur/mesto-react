@@ -3,8 +3,8 @@
 
 @import url(../blocks/page/page.css);
 
-/*---APP---*/
-@import url(../blocks/App/App.css);
+/*---ROOT---*/
+@import url(../blocks/body-style/body-style.css);
 
 /*---HEADER---*/
 @import url(../blocks/header/header.css);
