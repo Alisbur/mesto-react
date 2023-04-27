@@ -16,7 +16,8 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({name: '', link: ''});
   const [currentUser, setCurrentUser] = useState({ name:'', about:'', avatar:'' });
-
+  const [cards, setCards] = useState([]);
+ 
   React.useEffect(function () {
     api.getProfileData()
       .then((data)=>{
@@ -27,6 +28,14 @@ function App() {
       });
   }, []);
 
+  React.useEffect(function () {
+    api.getInitialCards()
+      .then((data)=>{
+        setCards(data)})
+      .catch((err) => {
+        alert(`Не удалось загрузить данные карточек! Ошибка: ${err}`);
+      });
+  }, []);
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -51,6 +60,19 @@ function App() {
     setSelectedCard(card);
   }
 
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
+      setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    });
+  } 
+
+  function handleCardDelete(card) {
+    api.deleteCard(card._id).then((newCard) => {
+      setCards((state) => state.filter((c) => c._id !== card._id));
+    });
+  }
+
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
@@ -60,6 +82,9 @@ function App() {
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
+          cards={cards}
         />
         <Footer />
 

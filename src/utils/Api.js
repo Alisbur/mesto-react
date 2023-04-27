@@ -82,6 +82,18 @@ class Api {
     return this._requestServer(path, message);
   }
 
+  //Метод формирования запроса для установки или снятия лайка
+  changeLikeCardStatus(cardId, isLiked) {
+    const path = `${this._server}/${this._group}/${this._cardsDataPath}/${cardId+"/likes"}`;
+    const action = isLiked ? 'DELETE' : 'PUT';
+    const message = { 
+      method: action,
+      headers: {
+        authorization: this._token,
+      }}
+    return this._requestServer(path, message);
+  }
+
   //Метод формирования запроса для установки лайка
   putLike(cardId) {
     const path = `${this._server}/${this._group}/${this._cardsDataPath}/${cardId+"/likes"}`;

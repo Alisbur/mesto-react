@@ -10,17 +10,6 @@ function Main(props) {
 
   const currentUser = React.useContext(CurrentUserContext);
 
-  const [cards, setCards] = useState([]);
-
-  React.useEffect(function () {
-    api.getInitialCards()
-      .then((data)=>{
-        setCards(data)})
-      .catch((err) => {
-        alert(`Не удалось загрузить данные карточек! Ошибка: ${err}`);
-      });
-  }, []);
-
   return (
     <main className="content">
       <section className="profile">
@@ -43,7 +32,15 @@ function Main(props) {
       </section>
 
       <section className="elements" aria-label="Галерея фотографий">
-        {cards.map((el, i)=><Card key={ el._id } card={ el } onCardClick={ props.onCardClick } />)}
+        {props.cards.map((el, i)=>
+          <Card 
+            key={ el._id } 
+            card={ el } 
+            onCardClick={ props.onCardClick }
+            onCardLike={ props.onCardLike } 
+            onCardDelete={ props.onCardDelete } 
+          />)
+        }
       </section>
     </main>
   );
