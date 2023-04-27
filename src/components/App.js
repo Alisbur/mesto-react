@@ -5,6 +5,7 @@ import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
 import PopupWithForm from './PopupWithForm.js';
+import EditProfilePopup from './EditProfilePopup.js';
 import ImagePopup from './ImagePopup.js';
 import api from '../utils/Api.js';
 import { CurrentUserContext } from './contexts/CurrentUserContext.js';
@@ -73,6 +74,17 @@ function App() {
     });
   }
 
+  function handleUpdateUser(newProfileData) {
+    api.modifyProfileData(newProfileData)
+      .then((data)=>{
+        setCurrentUser(data);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        alert(`Не удалось сохранить новые данные профиля! Ошибка: ${err}`);
+      });
+  }
+
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
@@ -88,18 +100,7 @@ function App() {
         />
         <Footer />
 
-        <PopupWithForm name='profilePopup' title='Редактировать профиль' submitBtnCaption="Сохранить" isOpen={ isEditProfilePopupOpen } onClose={ closeAllPopups } children={
-          <>
-            <fieldset className="popup__fieldset">
-              <input type="text" className="popup__input popup__input_type_name" placeholder="Введите имя" name="name" required minLength="2" maxLength="40" />
-              <span className="popup__input-error name-error"></span>
-            </fieldset>
-            <fieldset className="popup__fieldset">
-              <input type="text" className="popup__input popup__input_type_prof" placeholder="Введите профессию" name="prof" required minLength="2" maxLength="200" />
-              <span className="popup__input-error prof-error"></span>
-            </fieldset>
-          </>
-        } />
+        <EditProfilePopup isOpen={ isEditProfilePopupOpen } onUpdateUser={ handleUpdateUser } onClose={ closeAllPopups } />
 
         <PopupWithForm name='avatarPopup' title='Обновить аватар' submitBtnCaption="Сохранить" isOpen={ isEditAvatarPopupOpen } onClose={ closeAllPopups } children={
           <fieldset className="popup__fieldset">

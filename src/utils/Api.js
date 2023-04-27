@@ -26,7 +26,7 @@ class Api {
   }
 
   //Метод формирования запроса для изменения данных профиля  
-  modifyProfileData( {name, prof} ) {
+  modifyProfileData( {name, about} ) {
     const path = `${this._server}/${this._group}/${this._profileDataPath}`;
     const message = { 
       method: 'PATCH',
@@ -36,7 +36,7 @@ class Api {
       },
       body: JSON.stringify({
         name: name,
-        about: prof
+        about: about
       })
     }
     return this._requestServer(path, message);
