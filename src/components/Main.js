@@ -4,26 +4,13 @@ import editButtonPic from '../images/edit-button.svg';
 import addButtonPic from '../images/add-button-cross.svg';
 import Card from './Card.js';
 import api from '../utils/Api.js';
+import { CurrentUserContext } from './contexts/CurrentUserContext.js';
 
 function Main(props) {
 
-  const [userName, setUserName] = useState('');
-  const [userDescription, setUserDescription] = useState('');
-  const [userAvatar, setUserAvatar] = useState('');
+  const currentUser = React.useContext(CurrentUserContext);
+
   const [cards, setCards] = useState([]);
-
-
-  React.useEffect(function () {
-    api.getProfileData()
-      .then((data)=>{
-        setUserName(data.name);
-        setUserDescription(data.about);
-        setUserAvatar(data.avatar);
-      })
-      .catch((err) => {
-        alert(`Не удалось загрузить данные профиля! Ошибка: ${err}`);
-      });
-  }, []);
 
   React.useEffect(function () {
     api.getInitialCards()
@@ -38,16 +25,16 @@ function Main(props) {
     <main className="content">
       <section className="profile">
         <div className="profile__pers-data">
-          <button type="button" onClick={ props.onEditAvatar } style={{ backgroundImage: `url(${ userAvatar })` }} className="profile__avatar-button" aria-label="Изменить аватар">
+          <button type="button" onClick={ props.onEditAvatar } style={{ backgroundImage: `url(${ currentUser.avatar })` }} className="profile__avatar-button" aria-label="Изменить аватар">
           </button>
           <div className="profile__details">
             <div className="profile__name-field">
-              <h1 className="profile__name">{ userName }</h1>
+              <h1 className="profile__name">{ currentUser.name }</h1>
               <button type="button" onClick={ props.onEditProfile } className="profile__edit-button link-transparency" aria-label="Редактировать данные">
                 <img src={ editButtonPic } className="profile__edit-button-image" alt="Кнопка 'Изменить данные'" />
               </button>
             </div>
-            <p className="profile__profession">{ userDescription }</p>
+            <p className="profile__profession">{ currentUser.about }</p>
           </div>
         </div>
         <button type="button" onClick={ props.onAddPlace } className="profile__add-button link-transparency" aria-label="Добавить изображение">
