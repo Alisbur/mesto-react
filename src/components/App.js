@@ -6,6 +6,7 @@ import Main from './Main.js';
 import Footer from './Footer.js';
 import PopupWithForm from './PopupWithForm.js';
 import EditProfilePopup from './EditProfilePopup.js';
+import EditAvatarPopup from './EditAvatarPopup.js';
 import ImagePopup from './ImagePopup.js';
 import api from '../utils/Api.js';
 import { CurrentUserContext } from './contexts/CurrentUserContext.js';
@@ -85,6 +86,17 @@ function App() {
       });
   }
 
+  function handleUpdateAvatar(newLink) {
+    api.setUserAvatar(newLink)
+      .then((data)=>{
+        setCurrentUser(data);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        alert(`Не удалось сохранить новый аватар! Ошибка: ${err}`);
+      });
+  }
+
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
@@ -102,12 +114,7 @@ function App() {
 
         <EditProfilePopup isOpen={ isEditProfilePopupOpen } onUpdateUser={ handleUpdateUser } onClose={ closeAllPopups } />
 
-        <PopupWithForm name='avatarPopup' title='Обновить аватар' submitBtnCaption="Сохранить" isOpen={ isEditAvatarPopupOpen } onClose={ closeAllPopups } children={
-          <fieldset className="popup__fieldset">
-            <input type="url" className="popup__input popup__input_type_link" placeholder="Введите ссылку" name="link" required />
-            <span className="popup__input-error link-error"></span>
-          </fieldset>
-        } />
+        <EditAvatarPopup isOpen={ isEditAvatarPopupOpen } onUpdateAvatar={ handleUpdateAvatar } onClose={ closeAllPopups } /> 
 
         <PopupWithForm name='confirmPopup' title='Вы уверены?' submitBtnCaption="Да" onClose={ closeAllPopups } />
 

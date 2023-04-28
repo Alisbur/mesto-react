@@ -55,7 +55,6 @@ class Api {
         avatar: link
       })
     }
-    console.log(message);
     return this._requestServer(path, message);
   }
 

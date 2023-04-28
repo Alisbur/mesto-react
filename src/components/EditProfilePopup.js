@@ -23,10 +23,7 @@ function EditProfilePopup(props) {
   }
 
   function handleSubmit(e) {
-    // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
-  
-    // Передаём значения управляемых компонентов во внешний обработчик
     props.onUpdateUser({
       name,
       about: description,
@@ -37,11 +34,11 @@ function EditProfilePopup(props) {
     <PopupWithForm name='profilePopup' title='Редактировать профиль' submitBtnCaption="Сохранить" onSubmit={ handleSubmit } isOpen={ props.isOpen } onClose={ props.onClose } children={
       <>
         <fieldset className="popup__fieldset">
-          <input type="text" value={name} onChange={handleNameChange} className="popup__input popup__input_type_name" placeholder="Введите имя" name="name" required minLength="2" maxLength="40" />
+          <input type="text" value={ name } onChange={ handleNameChange } className="popup__input popup__input_type_name" placeholder="Введите имя" name="name" required minLength="2" maxLength="40" />
           <span className="popup__input-error name-error"></span>
         </fieldset>
         <fieldset className="popup__fieldset">
-          <input type="text" value={description} onChange={handleDescriptionChange} className="popup__input popup__input_type_prof" placeholder="Введите профессию" name="prof" required minLength="2" maxLength="200" />
+          <input type="text" value={ description } onChange={ handleDescriptionChange } className="popup__input popup__input_type_prof" placeholder="Введите профессию" name="prof" required minLength="2" maxLength="200" />
           <span className="popup__input-error prof-error"></span>
         </fieldset>
       </>
