@@ -23,6 +23,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({ name:'', about:'', avatar:'' });
   const [cards, setCards] = useState([]);
   const [cardToDelete, setCardToDelete] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
 //Получаем с сервера данные пользователя
   React.useEffect(function () {
@@ -103,6 +104,7 @@ function handleEscPress(e) {
 
 //Обработчик удаления карточки после подтверждения в соответствующем попапе
   function handleConfirmCardDelete() {
+    setIsSaving(true);
     api.deleteCard(cardToDelete._id)
       .then((newCard) => {
         setCards((state) => state.filter((c) => c._id !== cardToDelete._id));
@@ -110,11 +112,13 @@ function handleEscPress(e) {
       })
       .catch((err) => {
         alert(`Не удалось удалить карточку! Ошибка: ${err}`);
-      });
+      })
+      .finally(()=>setTimeout(()=>setIsSaving(false),1000));
   }
 
 //Обработчик сохранения новых данных пользователя на сервере
   function handleUpdateUser(newProfileData) {
+    setIsSaving(true);
     api.modifyProfileData(newProfileData)
       .then((data)=>{
         setCurrentUser(data);
@@ -122,11 +126,13 @@ function handleEscPress(e) {
       })
       .catch((err) => {
         alert(`Не удалось сохранить новые данные профиля! Ошибка: ${err}`);
-      });
+      })
+      .finally(()=>setTimeout(()=>setIsSaving(false),1000));
   }
 
 //Обработчик сохранения новых данных аватара на сервере
   function handleUpdateAvatar(newLink) {
+    setIsSaving(true);
     api.setUserAvatar(newLink)
       .then((data)=>{
         setCurrentUser(data);
@@ -134,11 +140,13 @@ function handleEscPress(e) {
       })
       .catch((err) => {
         alert(`Не удалось сохранить новый аватар! Ошибка: ${err}`);
-      });
+      })
+      .finally(()=>setTimeout(()=>setIsSaving(false),1000));
   }
 
 //Обработчик сохранения новой карточки места на сервере  
   function handleAddPlaceSubmit(newPlaceData) {
+    setIsSaving(true);
     api.addNewCard(newPlaceData)
       .then((data)=>{
         setCards([data, ...cards]);
@@ -146,7 +154,8 @@ function handleEscPress(e) {
       })
       .catch((err) => {
         alert(`Не удалось сохранить новое место! Ошибка: ${err}`);    
-      });
+      })
+      .finally(()=>setTimeout(()=>setIsSaving(false),1000));
   }
 
   return (
@@ -164,10 +173,10 @@ function handleEscPress(e) {
         />
         <Footer />
 
-        <EditProfilePopup isOpen={ isEditProfilePopupOpen } onUpdateUser={ handleUpdateUser } onClose={ closeAllPopups } />
-        <EditAvatarPopup isOpen={ isEditAvatarPopupOpen } onUpdateAvatar={ handleUpdateAvatar } onClose={ closeAllPopups } /> 
-        <ConfirmPopup isOpen={ isConfirmPopupOpen } onSubmit = { handleConfirmCardDelete } onClose={ closeAllPopups } />
-        <AddPlacePopup isOpen={ isAddPlacePopupOpen } onAddPlace={ handleAddPlaceSubmit } onClose={ closeAllPopups } /> 
+        <EditProfilePopup isOpen={ isEditProfilePopupOpen } submitBtnCap = {!isSaving ? 'Сохранить' : 'Сохранение...'} submitBtnDisabled = {isSaving} onUpdateUser={ handleUpdateUser } onClose={ closeAllPopups } />
+        <EditAvatarPopup isOpen={ isEditAvatarPopupOpen } submitBtnCap = {!isSaving ? 'Сохранить' : 'Сохранение...'} submitBtnDisabled = {isSaving} onUpdateAvatar={ handleUpdateAvatar } onClose={ closeAllPopups } /> 
+        <ConfirmPopup isOpen={ isConfirmPopupOpen } submitBtnCap = {!isSaving ? 'Да' : 'Удаление...'} submitBtnDisabled = {isSaving} onSubmit = { handleConfirmCardDelete } onClose={ closeAllPopups } />
+        <AddPlacePopup isOpen={ isAddPlacePopupOpen } submitBtnCap = {!isSaving ? 'Создать' : 'Сохранение...'} submitBtnDisabled = {isSaving} onAddPlace={ handleAddPlaceSubmit } onClose={ closeAllPopups } /> 
         <ImagePopup selectedCard={ selectedCard } onClose={ closeAllPopups } />
       </CurrentUserContext.Provider>
     </div>

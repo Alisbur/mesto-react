@@ -30,7 +30,7 @@ function EditAvatarPopup(props) {
   } 
 
   return (
-    <PopupWithForm name='avatarPopup' title='Обновить аватар' submitBtnCaption="Сохранить" onSubmit={ handleSubmit } isOpen={ props.isOpen } onClose={ props.onClose } children={
+    <PopupWithForm name='avatarPopup' title='Редактировать профиль' submitBtnCaption={props.submitBtnCap} submitBtnDisabled = {props.submitBtnDisabled} onSubmit={ handleSubmit } isOpen={ props.isOpen } onClose={ props.onClose } children={
       <fieldset className="popup__fieldset">
         <input ref={inputRef} type="url" value={ link } onChange={ handleLinkChange } className="popup__input popup__input_type_link" placeholder="Введите ссылку" name="link" required />
         <span className="popup__input-error link-error"></span>

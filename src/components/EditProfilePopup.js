@@ -38,7 +38,7 @@ function EditProfilePopup(props) {
   } 
 
   return (
-    <PopupWithForm name='profilePopup' title='Редактировать профиль' submitBtnCaption="Сохранить" onSubmit={ handleSubmit } isOpen={ props.isOpen } onClose={ props.onClose } children={
+    <PopupWithForm name='profilePopup' title='Обновить аватар' submitBtnCaption={props.submitBtnCap} submitBtnDisabled = {props.submitBtnDisabled} onSubmit={ handleSubmit } isOpen={ props.isOpen } onClose={ props.onClose } children={
       <>
         <fieldset className="popup__fieldset">
           <input type="text" value={ name } onChange={ handleNameChange } className="popup__input popup__input_type_name" placeholder="Введите имя" name="name" required minLength="2" maxLength="40" />

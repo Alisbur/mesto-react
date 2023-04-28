@@ -10,7 +10,7 @@ function ConfirmPopup(props) {
 
   return (
 
-    <PopupWithForm name='confirmPopup' title='Вы уверены?' submitBtnCaption="Да" onSubmit={ handleSubmit } isOpen={ props.isOpen } onClose={ props.onClose } />
+    <PopupWithForm name='confirmPopup' title='Вы уверены?' submitBtnCaption={props.submitBtnCap} submitBtnDisabled = {props.submitBtnDisabled} onSubmit={ handleSubmit } isOpen={ props.isOpen } onClose={ props.onClose } />
 
   );
 }

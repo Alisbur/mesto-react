@@ -33,7 +33,7 @@ function AddPlacePopup(props) {
   } 
 
   return (
-    <PopupWithForm name='cardPopup' title='Новое место' submitBtnCaption="Создать" onSubmit={ handleSubmit } isOpen={ props.isOpen } onClose={ props.onClose } children={
+    <PopupWithForm name='cardPopup' title='Новое место' submitBtnCaption={props.submitBtnCap} submitBtnDisabled = {props.submitBtnDisabled} onSubmit={ handleSubmit } isOpen={ props.isOpen } onClose={ props.onClose } children={
       <>
         <fieldset className="popup__fieldset">
           <input type="text" value={ name } onChange={ handleNameChange } className="popup__input popup__input_type_place" placeholder="Введите название места"
