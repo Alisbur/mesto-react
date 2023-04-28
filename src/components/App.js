@@ -7,6 +7,7 @@ import Footer from './Footer.js';
 import PopupWithForm from './PopupWithForm.js';
 import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
+import AddPlacePopup from './AddPlacePopup.js';
 import ImagePopup from './ImagePopup.js';
 import api from '../utils/Api.js';
 import { CurrentUserContext } from './contexts/CurrentUserContext.js';
@@ -97,6 +98,17 @@ function App() {
       });
   }
 
+  function handleAddPlaceSubmit(newPlaceData) {
+    api.addNewCard(newPlaceData)
+      .then((data)=>{
+        setCards([data, ...cards]);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        alert(`Не удалось сохранить новое место! Ошибка: ${err}`);    
+      });
+  }
+
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
@@ -118,19 +130,7 @@ function App() {
 
         <PopupWithForm name='confirmPopup' title='Вы уверены?' submitBtnCaption="Да" onClose={ closeAllPopups } />
 
-        <PopupWithForm name='cardPopup' title='Новое место' submitBtnCaption="Создать" isOpen={ isAddPlacePopupOpen } onClose={ closeAllPopups } children={
-          <>
-            <fieldset className="popup__fieldset">
-              <input type="text" className="popup__input popup__input_type_place" placeholder="Введите название места"
-              name="name" required minLength="2" maxLength="30" />
-              <span className="popup__input-error name-error"></span>
-            </fieldset>
-            <fieldset className="popup__fieldset">
-              <input type="url" className="popup__input popup__input_type_link" placeholder="Введите ссылку" name="link" required />
-              <span className="popup__input-error link-error"></span>
-            </fieldset>
-          </>
-        } />
+        <AddPlacePopup isOpen={ isAddPlacePopupOpen } onAddPlace={ handleAddPlaceSubmit } onClose={ closeAllPopups } /> 
 
         <ImagePopup selectedCard={ selectedCard } onClose={ closeAllPopups } />
       </CurrentUserContext.Provider>

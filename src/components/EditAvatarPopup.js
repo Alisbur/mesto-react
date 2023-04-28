@@ -1,10 +1,18 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm.js';
+import { CurrentUserContext } from './contexts/CurrentUserContext.js';
 
 function EditAvatarPopup(props) {
 
+  const currentUser = React.useContext(CurrentUserContext);
+
   const [link, setLink] = React.useState('');
   const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (props.isOpen) 
+      setLink('');
+  }, [props.isOpen]); 
 
   function handleLinkChange() {
     setLink(inputRef.current.value);
@@ -15,7 +23,6 @@ function EditAvatarPopup(props) {
     props.onUpdateAvatar({
       link
     });
-    setLink('');
   } 
 
   return (
