@@ -40,6 +40,10 @@ function App() {
       });
   }, []);
 
+  React.useEffect(() => {
+    document.addEventListener("keydown", handleEscPress);
+  }, [])
+
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
@@ -50,6 +54,12 @@ function App() {
 
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true);
+  }
+
+  function handleEscPress(e) {
+    if (e.key === 'Escape') {
+      closeAllPopups();
+    }
   }
 
   function closeAllPopups() {
@@ -133,6 +143,7 @@ function App() {
         <AddPlacePopup isOpen={ isAddPlacePopupOpen } onAddPlace={ handleAddPlaceSubmit } onClose={ closeAllPopups } /> 
 
         <ImagePopup selectedCard={ selectedCard } onClose={ closeAllPopups } />
+        
       </CurrentUserContext.Provider>
     </div>
   );

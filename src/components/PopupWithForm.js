@@ -1,8 +1,10 @@
+import React from "react";
+
 function PopupWithForm(props) {
 
   return (
-    <div className={`popup popup_type_${ props.name } popup_transition ${ props.isOpen ? 'popup_opened' : '' }`}>
-        <div className="popup__form-container">
+    <div className={`popup popup_type_${ props.name } popup_transition ${ props.isOpen ? 'popup_opened' : '' }`} onMouseDown={props.onClose}>
+        <div className="popup__form-container" onMouseDown={ (e)=>{e.stopPropagation()} }>
           <form className="popup__form" name={`${ props.name }Form`} onSubmit={props.onSubmit}>
             <h2 className="popup__title">{props.title}</h2>
             
