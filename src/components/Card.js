@@ -2,19 +2,24 @@ import React from 'react';
 import { CurrentUserContext } from './contexts/CurrentUserContext.js';
 
 function Card(props) {
-
+//Создаём переменную контекста
   const currentUser = React.useContext(CurrentUserContext);
+//Проверяем принадлежит ли карточка пользователю
   const isOwn = props.card.owner._id === currentUser._id;
+//Проверяем ставил ли пользователь лайк 
   const isLiked = props.card.likes.some(i => i._id === currentUser._id);
 
+//Обработчик клика по карточке. Вызов функции из props  
   function handleClick() {
     props.onCardClick(props.card);
   }  
 
+//Обработчик клика по лайку. Вызов функции из props
   function handleLikeClick() {
     props.onCardLike(props.card);
   }  
 
+//Обработчик клика по мусорной корзине. Вызов функции из props  
   function handleCardDelete() {
     props.onCardDelete(props.card);
   }  

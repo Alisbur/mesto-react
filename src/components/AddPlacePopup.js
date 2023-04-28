@@ -2,24 +2,28 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm.js';
 
 function AddPlacePopup(props) {
-
+//Переменные состояний
   const [name, setName] = React.useState('');
   const [link, setLink] = React.useState('');
 
+//Обнуление значений переменных состояний при закрытии попапа
   React.useEffect(() => {
     if (props.isOpen) {
       setName('');
       setLink('');}
   }, [props.isOpen]);
 
+//Изменение переменной названия 
   function handleNameChange(e) {
     setName(e.target.value);
   }
 
+//Изменение переменной ссылки
   function handleLinkChange(e) {
     setLink(e.target.value);
   }
 
+//Обработчик сабмита вызывает функцию сохранения новой карточки из props
   function handleSubmit(e) {
     e.preventDefault();
     props.onAddPlace({

@@ -4,25 +4,31 @@ import { CurrentUserContext } from './contexts/CurrentUserContext.js';
 
 function EditProfilePopup(props) {
 
+  //Создаём переменную контекста
   const currentUser = React.useContext(CurrentUserContext);
 
+  //Переменные состояний
   const [name, setName] = React.useState('');
   const [description, setDescription] = React.useState('');
 
+//Сброс значений полей попапа изменения данных профиля к дефолтным значениям при закрытии попапа
   React.useEffect(() => {
     if (props.isOpen) {
       setName(currentUser.name);
       setDescription(currentUser.about);}
   }, [props.isOpen]); 
 
+//ОБработчик изменения состояния переменной имени
   function handleNameChange(e) {
     setName(e.target.value);
   }
 
+//ОБработчик изменения состояния переменной профессии
   function handleDescriptionChange(e) {
     setDescription(e.target.value);
   }
 
+//ОБработчик сабмита, вызывающий функцию сохранения данных профиля на сервере, проброшенную из App
   function handleSubmit(e) {
     e.preventDefault();
     props.onUpdateUser({

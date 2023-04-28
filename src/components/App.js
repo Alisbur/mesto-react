@@ -8,19 +8,23 @@ import PopupWithForm from './PopupWithForm.js';
 import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
+import ConfirmPopup from './ConfirmPopup.js';
 import ImagePopup from './ImagePopup.js';
 import api from '../utils/Api.js';
 import { CurrentUserContext } from './contexts/CurrentUserContext.js';
 
 function App() {
-
+//Переменные состояний 
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({name: '', link: ''});
   const [currentUser, setCurrentUser] = useState({ name:'', about:'', avatar:'' });
   const [cards, setCards] = useState([]);
- 
+  const [cardToDelete, setCardToDelete] = useState(null);
+
+//Получаем с сервера данные пользователя
   React.useEffect(function () {
     api.getProfileData()
       .then((data)=>{
@@ -31,6 +35,7 @@ function App() {
       });
   }, []);
 
+//Получаем с сервера данные карточек
   React.useEffect(function () {
     api.getInitialCards()
       .then((data)=>{
@@ -40,39 +45,49 @@ function App() {
       });
   }, []);
 
+//Добавляем лисенер нажатия на кнопки для закрытия попапов по Esc 
   React.useEffect(() => {
     document.addEventListener("keydown", handleEscPress);
   }, [])
 
+//Обработчик нажатия на кнопку Esc
+function handleEscPress(e) {
+  if (e.key === 'Escape') {
+    closeAllPopups();
+  }
+}
+
+//Обработчик клика на аватар 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
   
+//Обработчик клика на кнопку редактирования профиля
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
 
+//Обработчик клика на кнопку добавления карточки
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true);
   }
 
-  function handleEscPress(e) {
-    if (e.key === 'Escape') {
-      closeAllPopups();
-    }
-  }
-
+//Закрытие всех попапов и обнуление переменных состояния
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
+    setIsConfirmPopupOpen(false);
     setSelectedCard({name: '', link: ''});
+    setCardToDelete(null);
   }
  
+//Обработчик клика по карточке
   function handleCardClick(card) {
     setSelectedCard(card);
   }
 
+//Обработчик клика по лайку 
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
     api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
@@ -80,12 +95,25 @@ function App() {
     });
   } 
 
+//Обработчик клика по иконке с корзиной
   function handleCardDelete(card) {
-    api.deleteCard(card._id).then((newCard) => {
-      setCards((state) => state.filter((c) => c._id !== card._id));
-    });
+    setCardToDelete(card);
+    setIsConfirmPopupOpen(true);
   }
 
+//Обработчик удаления карточки после подтверждения в соответствующем попапе
+  function handleConfirmCardDelete() {
+    api.deleteCard(cardToDelete._id)
+      .then((newCard) => {
+        setCards((state) => state.filter((c) => c._id !== cardToDelete._id));
+        closeAllPopups();
+      })
+      .catch((err) => {
+        alert(`Не удалось удалить карточку! Ошибка: ${err}`);
+      });
+  }
+
+//Обработчик сохранения новых данных пользователя на сервере
   function handleUpdateUser(newProfileData) {
     api.modifyProfileData(newProfileData)
       .then((data)=>{
@@ -97,6 +125,7 @@ function App() {
       });
   }
 
+//Обработчик сохранения новых данных аватара на сервере
   function handleUpdateAvatar(newLink) {
     api.setUserAvatar(newLink)
       .then((data)=>{
@@ -108,6 +137,7 @@ function App() {
       });
   }
 
+//Обработчик сохранения новой карточки места на сервере  
   function handleAddPlaceSubmit(newPlaceData) {
     api.addNewCard(newPlaceData)
       .then((data)=>{
@@ -135,15 +165,10 @@ function App() {
         <Footer />
 
         <EditProfilePopup isOpen={ isEditProfilePopupOpen } onUpdateUser={ handleUpdateUser } onClose={ closeAllPopups } />
-
         <EditAvatarPopup isOpen={ isEditAvatarPopupOpen } onUpdateAvatar={ handleUpdateAvatar } onClose={ closeAllPopups } /> 
-
-        <PopupWithForm name='confirmPopup' title='Вы уверены?' submitBtnCaption="Да" onClose={ closeAllPopups } />
-
+        <ConfirmPopup isOpen={ isConfirmPopupOpen } onSubmit = { handleConfirmCardDelete } onClose={ closeAllPopups } />
         <AddPlacePopup isOpen={ isAddPlacePopupOpen } onAddPlace={ handleAddPlaceSubmit } onClose={ closeAllPopups } /> 
-
         <ImagePopup selectedCard={ selectedCard } onClose={ closeAllPopups } />
-        
       </CurrentUserContext.Provider>
     </div>
   );

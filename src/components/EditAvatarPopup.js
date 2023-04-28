@@ -3,21 +3,25 @@ import PopupWithForm from './PopupWithForm.js';
 import { CurrentUserContext } from './contexts/CurrentUserContext.js';
 
 function EditAvatarPopup(props) {
-
+//Создаём переменную контекста
   const currentUser = React.useContext(CurrentUserContext);
-
+//Переменные состояний
   const [link, setLink] = React.useState('');
+//Создаём реф
   const inputRef = React.useRef(null);
 
+//Обнуляем инпут при закрытии попапа
   React.useEffect(() => {
     if (props.isOpen) 
       setLink('');
   }, [props.isOpen]); 
 
+//ОБработчик изменения состояния переменной ссылки
   function handleLinkChange() {
     setLink(inputRef.current.value);
   }
 
+//ОБработчик сабмита с сохранением ссылки на новый аватар с помощью функции, проброшенной через props
   function handleSubmit(e) {
     e.preventDefault();
     props.onUpdateAvatar({
